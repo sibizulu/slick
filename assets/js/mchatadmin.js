@@ -32,7 +32,7 @@ jQuery(function($){
     var chatter_name = $('#admName').val();
     var admPass = $('#admPass').val();
 
-  
+
 
     chatter_email = ($('#admEmail').val()) ? $('#admEmail').val() : "me@example.com";
     store.set('chatter', {"chatter_name":chatter_name, "chatter_email": chatter_email });
@@ -141,7 +141,6 @@ jQuery(function($){
       var room = $(this).attr('data-room');
       var chatsub = $(this).attr('data-chatsub');
       socket.emit('adminJoned', {"room":room});
-
       var aRooms = store.get('aroom');
       store.set('aroom', room);
 

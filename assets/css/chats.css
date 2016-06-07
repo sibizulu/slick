@@ -170,3 +170,32 @@ p { margin: 0; }
   font-style: italic;
   margin: 0 0 0 80px;
 }
+#slick_send_wrapper{
+  display: none;
+}
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px;
+    margin: 10px 0;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+.button1 {background-color: #4CAF50;} /* Green */
+.button2 {background-color: #008CBA;} /* Blue */
+.button3 {background-color: #f44336;} /* Red */
+.button4 {background-color: #e7e7e7; color: black;} /* Gray */
+.button5 {background-color: #555555;} /* Black */
+
+.button-res{width: 100%}
+.slick-message-form{position: relative;}
+.slick-message-form textarea{width: 100%; padding: 5px 0;resize: none;}
+.slick-message-form button{
+    position: absolute;
+    right: 23px;
+    top: 16px;
+    padding: 2px 7px;}

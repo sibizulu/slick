@@ -57,17 +57,33 @@ app.get('/mchatadmin', function (req, res) {
 });
 
 
-app.get('/products', function (req, res) {
-  getConnection(function (err, db) {
-    db.collection('products', function (err, collection) {
-      collection.find().sort({$natural : -1}).toArray(function(err, items) {
-        res.send(items);
-      });
-    });
+// handle incoming connections from clients
+io.sockets.on('connection', function(socket) {
+
+  socket.on('create', function(room) {
+    socket.room = room;
+    socket.join(room);
   });
+
+  socket.on('usersChat', function(data) {
+   io.emit('usersChat', data);
+  });
+
 });
 
+
+// app.get('/products', function (req, res) {
+//   getConnection(function (err, db) {
+//     db.collection('products', function (err, collection) {
+//       collection.find().sort({$natural : -1}).toArray(function(err, items) {
+//         res.send(items);
+//       });
+//     });
+//   });
+// });
+
 //The Chat
+/*
 io.sockets.on('connection', function (socket) {
   var shortid = require('shortid');
   socket.on('newuser', function (data, callback) {
@@ -312,3 +328,4 @@ io.sockets.on('connection', function (socket) {
   });
 
 });
+*/

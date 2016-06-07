@@ -2,14 +2,36 @@
 var SLICK = SLICK || {};
 
 SLICK.chatter = {
-  slickButton: "slick_send",
+  slickMail: "slick_mail",
+  slickName: "slick_name",
+  slickSubject: "slick_subject",
+  slickLogin: "slick_login", // Login button
   slickMessage: "slick_message",
+  slickSend: "slick_send", // Message sending button
   slickHistory: 'slick_history',
+  slickSocketType: {
+    user: "usersChat",
+    admin: "adminChat"
+  },
   slickReady: function(){
 
     var textMessage = document.getElementById(this.slickMessage);
+    var textHistory = document.getElementById(this.slickHistory);
+    textHistory.scrollTop = textHistory.scrollHeight;
     textMessage.value = "";
     textMessage.focus();
+  },
+  slickInit: function(){
+
+    var user = SLICK.storage.get("user");
+
+    // if (user !== "undefined"){
+    //   $('#' + SLICK.chatter.slickLogin + '_wrapper').slideUp();
+    //   $('#' + SLICK.chatter.slickSend + '_wrapper').slideDown();
+    // }
+
+
+    return io.connect();
   },
   slickEnter: function(e){
 
@@ -17,19 +39,26 @@ SLICK.chatter = {
      var txtArea = /textarea/i.test((e.target || e.srcElement).tagName);
      return txtArea || (e.keyCode || e.which || e.charCode || 0) !== 13;
   },
+  slickEnterChat: function(socket, socketData){
+   socket.emit('create', socketData.sroom);
+  },
   slickChat: function(socket, socketData){
 
-    var message = document.getElementById(this.slickMessage).value;
+    var message = (socketData.init) ? socketData.ssubject : document.getElementById(this.slickMessage).value;
+
     var socketObject = {
         "msg" : message,
-        "room" : socketData.room,
-        "name" : socketData.name
+        "room" : socketData.sroom,
+        "name" : socketData.sname,
+        "spicture" : socketData.spicture,
+        "stime": new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1")
     };
-    socket.emit(socketData.type, socketObject);
 
-    var chat_history = document.getElementById(this.slickHistory);
-    chat_history.innerHTML += SLICK.theming.userMessageTemplate(socketObject);
-    this.slickReady();
+   socket.emit(socketData.type, socketData);
+
+  var chat_history = document.getElementById(this.slickHistory);
+  chat_history.innerHTML += SLICK.theming.userMessageTemplate(socketObject);
+  this.slickReady();
   }
 };
 
@@ -39,58 +68,87 @@ SLICK.theming = {
     userMessageTemplate : function(message) {
 
       var template = '<div class="chat-message clearfix">';
-      template += '<img src="http://lorempixum.com/32/32/people" alt="" width="32" height="32">';
+      template += '<img src="' + message.spicture +'" alt="" width="32" height="32">';
       template += '<div class="chat-message-content clearfix">';
-      template += '<span class="chat-time">13:35</span>';
+      template += '<span class="chat-time">' + message.stime + '</span>';
       template += '<h5>' + message.name +'</h5>';
       template += '<p>' + message.msg + '</p>';
       template += '</div></div>';
-
-      console.log(template);
 
       return template;
     }
 };
 
+SLICK.storage = {
 
-var socket = io.connect();
+    save: function (key,value){
+        if (typeof(Storage) !== "undefined") {
+            localStorage.setItem(key, JSON.stringify(value));
+        } else {
+        console.log("Sorry! No Web Storage support..");
+        }
+    },
+    get: function (key){
+        if (typeof(Storage) !== "undefined") {
+          return JSON.parse(localStorage.getItem(key));
+        } else {
+          return 0;
+        }
+    }
+};
 
 
-$('#' + SLICK.chatter.slickButton).on("click", function(event) {
+
+var socket = SLICK.chatter.slickInit();
+socket.on('message', function(msg){
+        console.log(msg);
+      });
+
+$('#' + SLICK.chatter.slickLogin).on("click", function(event) {
   event.preventDefault();
 
-  var socketData = {
-    type : "usersChat",
-    room : "croom",
-    name : "Testing RP"
-  };
+  var chatter_name = $('#' + SLICK.chatter.slickName).val(),
+      chatter_email = $('#' + SLICK.chatter.slickMail).val(),
+      chatter_subject = $('#' + SLICK.chatter.slickSubject).val();
 
-  SLICK.chatter.slickChat(socket, socketData);
+  var hash = md5(chatter_email),
+      url = "https://secure.gravatar.com/avatar/" + hash + "?d=mm";
 
+  var userdata = {
+      "sname": chatter_name,
+      "semail": chatter_email,
+      "ssubject": chatter_subject,
+      "spicture": url,
+      "sroom": md5(chatter_email + chatter_name)
+    };
+
+  SLICK.storage.save("user",userdata);
+
+  var socketData = userdata;
+  socketData.type = SLICK.chatter.slickSocketType.user;
+  socketData.init = 1;
+
+  $('#' + SLICK.chatter.slickLogin + '_wrapper').slideUp();
+  $('#' + SLICK.chatter.slickSend + '_wrapper').slideDown();
+
+  SLICK.chatter.slickEnterChat(socket, socketData);
 });
 
 
- // function fitChat() {
- //    $('.chatter_convo').scrollTop($('.chatter_convo')[0].scrollHeight);
- //    $('#chatter_message').focus();
- //  }
 
-  // $('#sendchat').click(function() {
-  //   var thisChat = $('#chatter_message').val();
-  //   if( thisChat === '' ) {
-  //     return false;
-  //   }
-  //   //Get chatter details
-  //   var cname = store.get('cname'),
-  //   cemail = store.get('cemail'),
-  //   croom = store.get('croom'),
-  //   cpic = store.get("cpic");
-  //   socket.emit('usersChat', {"msg":thisChat, "room":croom, "chatter_name":cname});
-  //   var thisChatHtml = "<span class='chatter_msg_item chatter_msg_item_user clearfix'>\
-  //   <span class='chatter_avatar'><img src='"+cpic+"' /></span>\
-  //   <strong class='chatter_name'>"+cname+"</strong>"+thisChat+"</span>";
+$('#' + SLICK.chatter.slickSend).on("click", function(event) {
 
-  //   $('.chatter_convo').append(thisChatHtml);
-  //   $('#chatter_message').val('');
-  //   fitChat();
-  // });
+  event.preventDefault();
+
+  var userdata = SLICK.storage.get("user");
+
+  var socketData = {
+    type : SLICK.chatter.slickSocketType.user,
+    sroom : userdata.sroom,
+    sname : userdata.sname,
+    spicture: userdata.spicture,
+  };
+
+  SLICK.chatter.slickChat(socket, socketData);
+});
+

@@ -64,32 +64,34 @@
 
     <div class="chat">
 
+     <div id="slick_login_wrapper">
       <form action="" method="post" id="chatter_create_user">
         <div class="chatter_pre_signup">
-          <input type="text"  id="chatter_name" placeholder="Your name" class="chatter_field chatter_name" required="true" />
-          <input type="text" id="chatter_email" placeholder="Your email address" class="chatter_field chatter_email" required="true" />
-          <input type="text"  id="chat_sub" placeholder="What is it about?" class="chatter_field chat_sub" required="true" />
-          <button type="submit" class="chatter_btn chatter_create_user" >Start Chatting</button>
+          <input type="text"  id="slick_name" placeholder="Your name" required="true" />
+          <input type="text" id="slick_mail" placeholder="Your email address" required="true" />
+          <input type="text"  id="slick_subject" placeholder="What is it about?" required="true" />
+          <button type="submit" id="slick_login" class="button button4 button-res">Start Chatting</button>
         </div>
       </form>
+    </div>
+
+    <div id="slick_send_wrapper">
 
       <div id ="slick_history" class="chat-history">
 
 
       </div>
-
-
-      <form action="#" method="post">
+      <form action="#" method="post" class="slick-message-form">
 
         <fieldset>
-
-          <textarea id="slick_message" placeholder="Type your message…" autofocus></textarea>
+          <textarea id="slick_message" placeholder="Type your message…" rows="1" autofocus></textarea>
           <input type="hidden">
-          <button type="button" id="slick_send">Send</button>
-
+          <button type="button" id="slick_send" class="button button4">Send</button>
         </fieldset>
 
       </form>
+
+    </div>
 
 <!--       <div class="ui-widget">
         <textarea id="chatter_message" placeholder="Type your message here..." class="chatter_field chatter_message"></textarea>

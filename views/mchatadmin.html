@@ -53,7 +53,7 @@
 
       </div>
 
-      <div class="login-area">
+      <div id="slick_login_wrapper" class="login-area">
 
         <div class="wrap">
 
@@ -61,10 +61,10 @@
             <div class="logo">
               <i class="fa fa-5x fa-comments-o"></i>
             </div>
-            <input type="email" class="form-control" required="true" id="admEmail" placeholder="Email Address" value="sofia@googlemail.com">
-            <input type="text" class="form-control" id="admName" placeholder="Your Name" value="Sobhia S">
+            <input type="email" class="form-control" required="true" id="slick_mail" placeholder="Email Address" value="gopal@slick.com">
+            <input type="text" class="form-control" id="slick_name" placeholder="Your Name" value="Gopalan K">
             <input type="password" class="form-control" required="true" id="admPass" placeholder="Password" value="">
-            <button type="submit" class="btn btn-default">Sign In</button>
+            <button type="submit" id="slick_login" class="btn btn-default">Sign In</button>
             <span class="msgred"></span>
           </form>
         </div>
@@ -72,12 +72,8 @@
 
       </div>
 
-      <div class="window-area">
+      <div id="slick_send_wrapper" class="window-area">
         <div class="conversation-list">
-          <ul class="customers" id="newusers">
-            <li class="item"><a href="#"><i class="fa fa-list-alt"></i><span><b>CUSTOMERS</b></span></a></li>
-            <li class='text-muted realcust' data-chatsub='sdfsdf' data-room='sdfsdf'><a href='#'><span>history</span></a></li>
-          </ul>
           <div class="my-account">
             <div class="image">
               <img id="admimg" src="">
@@ -88,8 +84,11 @@
               <i class="fa fa-angle-down"></i>
               <span class="availability">Available</span>
             </div>
-
           </div>
+          <ul class="customers" id="newusers">
+            <li class="item"><a href="#"><i class="fa fa-list-alt"></i><span><b>CUSTOMERS</b></span></a></li>
+            <li class='text-muted realcust' data-chatsub='sdfsdf' data-room='sdfsdf'><a href='#'><span>history</span></a></li>
+          </ul>
         </div>
         <div class="chat-area">
           <div class="title"><b id="conv-title">---</b><i id="endchat" class="fa fa-search"> / end chat</i></div>
@@ -109,7 +108,7 @@
           </div>
         </div>
         <div class="right-tabs">
-          <ul class="tabs">
+  <!--         <ul class="tabs">
             <li class="active">
               <a href="#"><i class="fa fa-users"></i></a>
             </li>
@@ -127,7 +126,7 @@
             </li>
             <li></li>
             <li></li>
-          </ul>
+          </ul> -->
           <i class="fa fa-cog"></i>
         </div>
       </div>
@@ -278,10 +277,8 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="../assets/js/bootstrap.min.js"></script>
-    <script src="../assets/js/store.min.js"></script>
     <script src="../assets/js/md5.min.js"></script>
-    <script src="../assets/js/mchatadmin.js"></script>
+    <script src="../assets/js/slick-admin.js"></script>
 
   </body>
   </html>

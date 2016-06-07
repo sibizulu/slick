@@ -364,6 +364,8 @@ ul.tabs-container{
 	height: 29px;
 	padding: 8px;
 	background: #445166;
+	display: inline-table;
+  width: 100%;
 }
 .my-account > .image{
 	width: 30px;
@@ -400,4 +402,7 @@ ul.tabs-container{
 }
 .jspVerticalBar{
 	width: 7px;
+}
+.window-area{
+  display: none
 }
